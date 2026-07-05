@@ -3,6 +3,6 @@
 *.obj
 *.exe
 .vscode/
-
+*/build/*
 # Model weights / tokenizer (fetch with models/download.py; not committed)
 *.bin
