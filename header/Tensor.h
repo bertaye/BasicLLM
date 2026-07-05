@@ -20,6 +20,9 @@ struct Tensor
     size_t   byteStrides[MAX_DIMS]   = {0, 0, 0, 0};
     uint8_t* data     = nullptr;
     int*     refCount = nullptr;
+    // What malloc returned. Ops like Slice move `data` into the middle of the
+    // block, so the last owner must free THIS pointer, never `data`
+    uint8_t* allocationBase = nullptr;
 
     Tensor() = default;
 
@@ -34,6 +37,7 @@ struct Tensor
         byteStrides[3] = byteStrides[2] * count2;
         data     = static_cast<uint8_t*>(std::malloc(TotalBytes()));
         refCount = new int(1);
+        allocationBase = data;
     }
 
     static Tensor View(int64_t count0, int64_t count1, int64_t count2, int64_t count3, uint8_t* dataPtr) {
@@ -58,6 +62,7 @@ struct Tensor
         }
         data     = other.data;
         refCount = other.refCount;
+        allocationBase = other.allocationBase;
         if (refCount) {
             ++*refCount;
         }
@@ -71,7 +76,7 @@ struct Tensor
             ++*other.refCount;
         }
         if (refCount && --*refCount == 0) {
-            std::free(data);
+            std::free(allocationBase);
             delete refCount;
         }
         for (int i = 0; i < MAX_DIMS; ++i) {
@@ -80,6 +85,7 @@ struct Tensor
         }
         data     = other.data;
         refCount = other.refCount;
+        allocationBase = other.allocationBase;
         return *this;
     }
 
@@ -90,8 +96,10 @@ struct Tensor
         }
         data     = other.data;
         refCount = other.refCount;
+        allocationBase = other.allocationBase;
         other.data     = nullptr;
         other.refCount = nullptr;
+        other.allocationBase = nullptr;
     }
 
     Tensor& operator=(Tensor&& other) noexcept {
@@ -99,7 +107,7 @@ struct Tensor
             return *this;
         }
         if (refCount && --*refCount == 0) {
-            std::free(data);
+            std::free(allocationBase);
             delete refCount;
         }
         for (int i = 0; i < MAX_DIMS; ++i) {
@@ -108,14 +116,16 @@ struct Tensor
         }
         data     = other.data;
         refCount = other.refCount;
+        allocationBase = other.allocationBase;
         other.data     = nullptr;
         other.refCount = nullptr;
+        other.allocationBase = nullptr;
         return *this;
     }
 
     ~Tensor() {
         if (refCount && --*refCount == 0) {
-            std::free(data);
+            std::free(allocationBase);
             delete refCount;
         }
     }
