@@ -4,5 +4,6 @@
 *.exe
 .vscode/
 */build/*
+*/build-linux/*
 # Model weights / tokenizer (fetch with models/download.py; not committed)
 *.bin

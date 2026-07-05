@@ -92,14 +92,14 @@ Numbers scale with sequence length and machine; the two paths produce identical 
 
 ## Chapters: Build It Yourself
 
-You can implement this entire engine yourself. Each `Ch*` folder is a self-contained mini-project: a README that teaches the concepts, headers where every function has its math in a comment and an **empty body**, and a test runner that reports each op as `OK` / `FAILED` / `SKIPPED`. From Chapter 2 on, your numbers are checked against this repository's reference implementation running the real `stories15M` weights. Later chapters ship the earlier answers, so every folder builds standalone.
+You can implement this entire engine yourself. Each `ch*` folder is a self-contained mini-project: a README that teaches the concepts, headers where every function has its math in a comment and an **empty body**, and a test runner that reports each op as `OK` / `FAILED` / `SKIPPED`. From Chapter 2 on, your numbers are checked against this repository's reference implementation running the real `stories15M` weights. Later chapters ship the earlier answers, so every folder builds standalone.
 
 | Chapter | You implement |
 |---------|---------------|
-| [Ch1. Architecture and Tensor Ops](Ch1.%20Architecture%20and%20Tensor%20Ops/) | The strided-tensor ops: matmul, softmax, RMSNorm, SiLU, RoPE, causal masking, attention |
-| [Ch2. The Forward Pass](Ch2.%20The%20Forward%20Pass/) | Slicing, embedding lookup, projections, multi-head attention, the full transformer forward pass |
-| [Ch3. Sampling](Ch3.%20Sampling/) | Greedy and temperature sampling, the autoregressive generation loop (your model writes its first story) |
-| [Ch4. KV Cache](Ch4.%20KV%20Cache/) | Cached attention, prefill and decode: identical output, several times faster |
+| [Ch1. Architecture and Tensor Ops](ch1-tensor-ops/) | The strided-tensor ops: matmul, softmax, RMSNorm, SiLU, RoPE, causal masking, attention |
+| [Ch2. The Forward Pass](ch2-forward-pass/) | Slicing, embedding lookup, projections, multi-head attention, the full transformer forward pass |
+| [Ch3. Sampling](ch3-sampling/) | Greedy and temperature sampling, the autoregressive generation loop (your model writes its first story) |
+| [Ch4. KV Cache](ch4-kv-cache/) | Cached attention, prefill and decode: identical output, several times faster |
 
 Do them in order; each chapter leans on the previous one. The tokenizer and the weight-file parsing stay given throughout (they are plumbing, not transformer knowledge) and are short, commented reads in `header/` when you get curious.
 
@@ -115,10 +115,10 @@ header/                  # header-only core (namespace basicllm)
   Logger.h               #   logging
 src/main.cpp             # entry point
 models/download.py       # fetches stories15M.bin + tokenizer.bin
-Ch1. Architecture and Tensor Ops/   # the course: implement the engine yourself,
-Ch2. The Forward Pass/              #   one self-contained chapter at a time
-Ch3. Sampling/                      #   (each has its own README, stubs, and tests)
-Ch4. KV Cache/
+ch1-tensor-ops/          # the course: implement the engine yourself,
+ch2-forward-pass/        #   one self-contained chapter at a time
+ch3-sampling/            #   (each has its own README, stubs, and tests)
+ch4-kv-cache/
 CMakeLists.txt
 ```
 
