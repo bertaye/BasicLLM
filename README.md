@@ -14,7 +14,7 @@ BasicLLM runs a real Llama 2 model on the CPU with no external dependencies. It 
 The core is header-only C++17; the only tooling is a standard-library Python script to fetch the model.
 
 > [!NOTE]
-> The code here is deliberately unoptimized: single-threaded, no SIMD, plain f32, naive matmul. Every op is written to be read and understood, not to be fast. If you want speed, use [llama.cpp](https://github.com/ggerganov/llama.cpp); if you want to know what it is doing under the hood, read on.
+> The code here is deliberately unoptimized: single-threaded, no SIMD, plain f32, naive matmul. Every op is written to be read and understood, not to be fast. If you want speed, use [llama.cpp](https://github.com/ggerganov/llama.cpp); this is the version that is small enough to read in one sitting, and to build yourself from scratch.
 
 ## Features
 
